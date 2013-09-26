@@ -4,6 +4,7 @@ require 'shellwords'
 
 class Shelly
   BUILTINS = {
+    'exit' => ->(code=0) { exit(code.to_i) },
     'cd' => ->(dir) { Dir.chdir(dir) }
   }
 
