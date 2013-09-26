@@ -2,7 +2,7 @@
 
 require 'shellwords'
 
-class Shelly
+class Shirt
   BUILTINS = {
     'exit' => ->(code=0) { exit(code.to_i) },
     'cd' => ->(dir) { Dir.chdir(dir) },
@@ -42,5 +42,5 @@ class Shelly
   end
 end
 
-Shelly.new.run
+Shirt.new.run
 
