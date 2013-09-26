@@ -24,7 +24,7 @@ class Shirt
       if BUILTINS[command]
         BUILTINS[command].call(*arguments)
       else
-        pid = fork { exec(line) }
+        pid = fork { exec(command, *arguments) }
 
         Process.wait pid
       end
