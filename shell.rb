@@ -5,7 +5,8 @@ require 'shellwords'
 class Shelly
   BUILTINS = {
     'exit' => ->(code=0) { exit(code.to_i) },
-    'cd' => ->(dir) { Dir.chdir(dir) }
+    'cd' => ->(dir) { Dir.chdir(dir) },
+    'exec' => ->(*command) { exec *command }
   }
 
   def run
