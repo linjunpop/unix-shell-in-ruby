@@ -4,43 +4,35 @@ require 'shellwords'
 
 class Shirt
   BUILTINS = {
-    'exit' => ->(code=0) { exit(code.to_i) },
-    'cd' => ->(dir) { Dir.chdir(dir) },
-    'exec' => ->(*command) { exec *command }
+    'exit' => ->(code = 0) { exit(code.to_i) },
+    'cd' => ->(dir = ENV['HOME']) { Dir.chdir(dir) },
+    'exec' => ->(*command) { exec *command },
+    'set' => ->(args) {
+      key, value = args.split('=')
+      ENV[key] = value
+    }
   }
 
   def run
     loop do
-      print_prompt
+      $stdout.print ENV['PROMPT']
 
-      line = $stdin.gets
-
-      if line
-        line.strip!
-      else
-        exit
-      end
+      line = $stdin.gets.strip
 
       command, *arguments = line.shellsplit
 
       if BUILTINS[command]
         BUILTINS[command].call(*arguments)
       else
-        pid = fork {
-          exec line
-        }
+        pid = fork { exec(line) }
 
         Process.wait pid
       end
     end
   end
-
-  private
-
-  def print_prompt
-    $stdout.print '$-> '
-  end
 end
+
+ENV['PROMPT'] = '$ -> '
 
 Shirt.new.run
 
